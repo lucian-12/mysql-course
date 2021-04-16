@@ -43,3 +43,7 @@ drop index state_id_idx on userinfo;
 
 ALTER TABLE userinfo ADD INDEX name_state_id_idx(name, state_id);
 ANALYZE TABLE userinfo;
+
+
+# Identifying useless redundant indexes
+select * from sys.schema_redundant_indexes\G
