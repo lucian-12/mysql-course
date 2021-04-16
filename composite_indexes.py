@@ -11,7 +11,7 @@ for x in range(0, 1000000):
 total_time = time.time() - start_time
 print("- Total time: %s seconds -" % total_time)
 
-# The benchmark test
+# The Composite Index benchmark test
 import time
 query = ("SELECT count(*) FROM userinfo WHERE `name` = ? AND `state_id` = ?", ['John100', 100])
 nb_of_requests = 300
@@ -20,6 +20,34 @@ for x in range(0, nb_of_requests):
     sql = query[0]
     param = query[1]
     result = session.run_sql(sql, (param[0],param[1],))
+total_time = time.time() - start_time
+qps = nb_of_requests / total_time
+print("- Total time: %s seconds -" % total_time)
+print("--- %s QPS ---" % qps)
+
+# Redundant Indexes benchmark test 1
+import time
+query = ("SELECT count(*) FROM userinfo WHERE `state_id` = ?", 1000)
+nb_of_requests = 300
+start_time = time.time()
+for x in range(0, nb_of_requests):
+    sql = query[0]
+    param = query[1]
+    result = session.run_sql(sql, (param,))
+total_time = time.time() - start_time
+qps = nb_of_requests / total_time
+print("- Total time: %s seconds -" % total_time)
+print("--- %s QPS ---" % qps)
+
+# Redundant Indexes benchmark test 2
+import time
+query = ("SELECT state_id, city, address FROM userinfo WHERE `state_id` = ?", 5)
+nb_of_requests = 300
+start_time = time.time()
+for x in range(0, nb_of_requests):
+    sql = query[0]
+    param = query[1]
+    result = session.run_sql(sql, (param,))
 total_time = time.time() - start_time
 qps = nb_of_requests / total_time
 print("- Total time: %s seconds -" % total_time)
